@@ -1,5 +1,8 @@
 const fs = require('fs');
 const http = require('http');
+const jsonHandler = require('./jsonHandler.js');
+const { json } = require('stream/consumers');
+
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const index = fs.readFileSync(`${__dirname}/../client/index.html`);
@@ -19,7 +22,11 @@ const onRequest = (request, response) => {
         case '/style':
             getStyle(response);
             break;
-    }
+
+        case '/getAll':
+            jsonHandler.GetAll(response);
+            break;
+        }
 }
 
 const getIndex = (response) => {
