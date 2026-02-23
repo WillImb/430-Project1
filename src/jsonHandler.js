@@ -59,7 +59,6 @@ const AddRead = () => {
 
 
 module.exports = {
-    handleResponse,
     GetAllBooks,
     GetBookTitles,
     GetBooksByAuthor,
