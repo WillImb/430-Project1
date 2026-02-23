@@ -42,7 +42,34 @@
         })
             */
     }
+
+    const GetSpecifiedBook = async () => {
+
+        /*
+        let response = await fetch('/getBook',{
+        method: 'GET',
+        headers: {
+            'Content-Type':'application/json',
+            'Accept': 'application/json'
+        },
+        body:,
+        })
+        */
+    }
+
+    const init = () => {
+        const bookForm = document.querySelector("#bookForm");
+
+
+        const GetBook = (e) =>{
+            e.preventDefault();
+            GetSpecifiedBook(bookForm);
+            return false;
+        }
+    }
     
+
+    window.onload = init;
 
 
 
@@ -52,6 +79,11 @@
 
 <body>
     working
+    <form id="bookForm">
+        <input type="text" id="bookName">
+        <input type="submit" value="Submit">
+    </form>
+
 </body>
 
 </html>
