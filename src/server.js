@@ -24,9 +24,15 @@ const onRequest = (request, response) => {
             break;
 
         case '/getAll':
-            jsonHandler.GetAll(response);
+            jsonHandler.GetAllBooks(request,response);
             break;
-        }
+
+        case '/getTitles':
+            jsonHandler.GetBookTitles(request, response);
+            break;
+        
+         
+    }
 }
 
 const getIndex = (response) => {
