@@ -30,6 +30,19 @@ const onRequest = (request, response) => {
         case '/getTitles':
             jsonHandler.GetBookTitles(request, response);
             break;
+
+        case '/getBooksByAuthor':
+            jsonHandler.GetBooksByAuthor(request, response);
+            break;
+        case '/getBook':
+            jsonHandler.GetBook(request, response);
+            break;
+        case '/addBook':
+            jsonHandler.AddBook(request, response);
+            break;
+        case '/addRead':
+            jsonHandler.AddRead(request, response);
+            break;
         
          
     }

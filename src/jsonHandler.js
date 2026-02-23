@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { request } = require('http');
 
 let booksJson = fs.readFileSync(`${__dirname}/../data/books.json`);
 
@@ -26,12 +27,12 @@ const GetBookTitles = (request, response) => {
 }
 
 //Get all the books by a specified author
-const GetBooksByAuthor = (request, response, author) => {
+const GetBooksByAuthor = (request, response) => {
 
     let authorJson = {};
 
     for(let i = 0; i < booksJson.length; i++){
-        if(booksJson[i].author == author){
+        if(booksJson[i].author == request.body.author){
             authorJson[authorJson.length] = booksJson[i];
         }
     }
@@ -39,15 +40,23 @@ const GetBooksByAuthor = (request, response, author) => {
 }
 
 //get book by user specified title
-const GetBook = (request, response, bookName) => {
+const GetBook = (request, response) => {
     let book = {};
 
     for(let i = 0; i < booksJson.length; i++){
-        if(booksJson[i].title == bookName){
+        if(booksJson[i].title == request.body.bookName){
             authorJson[authorJson.length] = booksJson[i];
         }
     }
 }
+
+const AddBook = (request, response) => {
+    booksJson[booksJson] = request.body;
+}
+const AddRead = () => {
+    booksJson[request.body.book].read = "true";
+}
+
 
 module.exports = {
     handleResponse,
@@ -55,5 +64,7 @@ module.exports = {
     GetBookTitles,
     GetBooksByAuthor,
     GetBook,
+    AddBook,
+    AddRead,
 
 };
