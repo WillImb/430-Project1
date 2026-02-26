@@ -5,84 +5,159 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
+
+    <script>
+
+
+        const ResolveStatus = async (response, textField) => {
+            let status = response.status;
+
+            let responseObj = await response.json();
+
+            switch (status) {
+                case 200:
+                    textField.innerHTML = JSON.stringify(responseObj);
+                    break;
+                case 201:
+                    break;
+                case 204:
+                    break;
+                case 400:
+                    break;
+
+                case 404:
+                    break;
+
+
+            }
+        }
+
+        const AddBook = async () => {
+
+            /*
+            let response = await fetch(, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: 
+            })
+                */
+        }
+
+        const GetSpecifiedBook = async (form) => {
+
+            const title = form.querySelector("bookName").value;
+
+            let content = { title: title, };
+
+            let response = await fetch('/getBook', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            })
+
+        }
+
+        const GetAllBooks = async () => {
+
+            let bookText = document.querySelector("#books");
+            let response = await fetch('/getAll', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            })
+
+            ResolveStatus(response, bookText);
+
+        }
+        const GetTitles = async () => {
+
+            let titleText = document.querySelector("#titles");
+            let response = await fetch('/getTitles', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+            })
+
+            ResolveStatus(response, titleText);
+
+        }
+
+        const init = () => {
+            const bookForm = document.querySelector("#bookForm");
+            const booksButton = document.querySelector("#btn_Books");
+            const titlesButton = document.querySelector("#btn_Titles");
+
+
+            const GetBook = (e) => {
+                e.preventDefault();
+                GetSpecifiedBook(bookForm);
+                return false;
+            }
+
+            const Add = (e) => {
+                e.preventDefault();
+                AddBook();
+                return false;
+            }
+
+
+            bookForm.addEventListener("submit", GetBook);
+
+            booksButton.addEventListener("click", GetAllBooks);
+            titlesButton.addEventListener("click", GetTitles);
+
+
+        }
+
+
+        window.onload = init;
+
+
+
+
+
+    </script>
+
 </head>
 
-<script>
-
-
-    const GetStatus = async (response) => {
-        let status = 0;
-        switch (status) {
-            case 200:
-                break;
-            case 201:
-                break;
-            case 204:
-                break;
-            case 400:
-                break;
-
-            case 404:
-                break;
-
-
-        }
-    }
-
-    const AddBook = async () => {
-        
-        /*
-        let response = await fetch(, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: 
-        })
-            */
-    }
-
-    const GetSpecifiedBook = async () => {
-
-        /*
-        let response = await fetch('/getBook',{
-        method: 'GET',
-        headers: {
-            'Content-Type':'application/json',
-            'Accept': 'application/json'
-        },
-        body:,
-        })
-        */
-    }
-
-    const init = () => {
-        const bookForm = document.querySelector("#bookForm");
-
-
-        const GetBook = (e) =>{
-            e.preventDefault();
-            GetSpecifiedBook(bookForm);
-            return false;
-        }
-    }
-    
-
-    window.onload = init;
-
-
-
-
-
-</script>
-
 <body>
-    working
+    Get Book by name
     <form id="bookForm">
         <input type="text" id="bookName">
         <input type="submit" value="Submit">
     </form>
+
+    Get books
+
+    <button id="btn_Books">/GetAllBooks</button>
+    <p id="books"></p>
+
+    GetBookTitles
+    <button id="btn_Titles">/GetAllTitles</button>
+    <p id="titles"></p>
+
+
+
+    get books by author
+
+
+    <!--Post Requests-->
+
+    Add Book
+
+    Add read;
+
+
 
 </body>
 

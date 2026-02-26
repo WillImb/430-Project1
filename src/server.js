@@ -6,7 +6,7 @@ const jsonHandler = require('./jsonHandler.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const index = fs.readFileSync(`${__dirname}/../client/index.html`);
-const css = fs.readFileSync(`${__dirname}/../client/styles.css`);
+const css = fs.readFileSync(`${__dirname}/../client/style.css`);
 
 const onRequest = (request, response) => {
 
@@ -19,7 +19,7 @@ const onRequest = (request, response) => {
         case '/':
             getIndex(response);
             break;
-        case '/style':
+        case '/style.css':
             getStyle(response);
             break;
 
@@ -43,6 +43,8 @@ const onRequest = (request, response) => {
         case '/addRead':
             jsonHandler.AddRead(request, response);
             break;
+        default:
+            jsonHandler.nonExistent(request,response);
         
          
     }

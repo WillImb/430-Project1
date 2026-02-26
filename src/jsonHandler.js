@@ -1,13 +1,13 @@
 const fs = require('fs');
 const { request } = require('http');
 
-let booksJson = fs.readFileSync(`${__dirname}/../data/books.json`);
+let booksJson = JSON.parse(fs.readFileSync(`${__dirname}/../data/books.json`));
 
 
 //get alll book objects
 const GetAllBooks = (request, response) => {
     response.writeHead(200, { 'Content-Type': 'application/json' });
-    response.write(booksJson);
+    response.write(JSON.stringify(booksJson));
     response.end();
 }
 
@@ -22,7 +22,7 @@ const GetBookTitles = (request, response) => {
     }
 
     response.writeHead(200, { 'Content-Type': 'application/json' });
-    response.write(titleJson);
+    response.write(JSON.stringify(titleJson));
     response.end();
 }
 
@@ -40,14 +40,30 @@ const GetBooksByAuthor = (request, response) => {
 }
 
 //get book by user specified title
+
 const GetBook = (request, response) => {
+
     let book = {};
 
     for(let i = 0; i < booksJson.length; i++){
         if(booksJson[i].title == request.body.bookName){
-            authorJson[authorJson.length] = booksJson[i];
+            
         }
     }
+}
+    
+
+const nonExistent = (request,response) =>{
+    let body = JSON.stringify({
+        message: "Error Endpoint does not exist",
+    });
+
+    response.writeHead(404, { 'Content-Type': 'application/json', 
+            'Content-Length': Buffer.byteLength(body,'utf8')
+
+    });
+    response.write(body);    
+    response.end();
 }
 
 const AddBook = (request, response) => {
@@ -58,11 +74,14 @@ const AddRead = () => {
 }
 
 
+
+
 module.exports = {
     GetAllBooks,
     GetBookTitles,
     GetBooksByAuthor,
     GetBook,
+    nonExistent,
     AddBook,
     AddRead,
 

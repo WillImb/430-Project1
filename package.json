@@ -20,7 +20,7 @@
   "homepage": "https://github.com/WillImb/430-Project1#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.0.1",
+    "eslint": "^10.0.2",
     "globals": "^17.3.0"
   }
 }
