@@ -24,6 +24,8 @@
                 case 204:
                     break;
                 case 400:
+                    textField.innerHTML = JSON.stringify(responseObj);
+
                     break;
 
                 case 404:
@@ -49,17 +51,24 @@
 
         const GetSpecifiedBook = async (form) => {
 
-            const title = form.querySelector("bookName").value;
+            let bookText = document.querySelector("#specifiedBookText");
 
-            let content = { title: title, };
+            const title = form.querySelector("#bookName").value;
 
-            let response = await fetch('/getBook', {
+            let params = new URLSearchParams();
+            params.append("title",title);
+
+            let response = await fetch(`/getBook?${params}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
+            
             })
+
+            ResolveStatus(response,bookText);
+
 
         }
 
@@ -72,6 +81,7 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
+                
             })
 
             ResolveStatus(response, bookText);
@@ -137,7 +147,9 @@
         <input type="submit" value="Submit">
     </form>
 
-    Get books
+    <p id="specifiedBookText"></p>
+    
+    <br>Get books
 
     <button id="btn_Books">/GetAllBooks</button>
     <p id="books"></p>

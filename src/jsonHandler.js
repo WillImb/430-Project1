@@ -1,4 +1,5 @@
 const fs = require('fs');
+const url = require('url');
 const { request } = require('http');
 
 let booksJson = JSON.parse(fs.readFileSync(`${__dirname}/../data/books.json`));
@@ -14,10 +15,10 @@ const GetAllBooks = (request, response) => {
 
 //gets all of the book titles
 const GetBookTitles = (request, response) => {
-    
+
     let titleJson = {};
 
-    for(let i = 0; i < booksJson.length; i++){
+    for (let i = 0; i < booksJson.length; i++) {
         titleJson[i] = booksJson[i].title;
     }
 
@@ -29,13 +30,23 @@ const GetBookTitles = (request, response) => {
 //Get all the books by a specified author
 const GetBooksByAuthor = (request, response) => {
 
-    let authorJson = {};
+    let book = url.parse(request.url, true).query;
 
-    for(let i = 0; i < booksJson.length; i++){
-        if(booksJson[i].author == request.body.author){
-            authorJson[authorJson.length] = booksJson[i];
+
+
+    for (let i = 0; i < booksJson.length; i++) {
+        if (booksJson[i].title == book.title) {
+            response.writeHead(200, { 'Content-Type': 'application/json' });
+            response.write(JSON.stringify(booksJson[i]));
+            response.end();
+            return;
         }
     }
+
+    response.writeHead(400, { 'Content-Type': 'application/json' });
+    response.write("Book Not Found");
+    response.end();
+
 
 }
 
@@ -43,26 +54,39 @@ const GetBooksByAuthor = (request, response) => {
 
 const GetBook = (request, response) => {
 
-    let book = {};
+    let book = url.parse(request.url, true).query;
 
-    for(let i = 0; i < booksJson.length; i++){
-        if(booksJson[i].title == request.body.bookName){
-            
+
+
+    for (let i = 0; i < booksJson.length; i++) {
+        if (booksJson[i].title == book.title) {
+            response.writeHead(200, { 'Content-Type': 'application/json' });
+            response.write(JSON.stringify(booksJson[i]));
+            response.end();
+            return;
         }
     }
-}
-    
 
-const nonExistent = (request,response) =>{
+    response.writeHead(400, { 'Content-Type': 'application/json' });
+    response.write("Book Not Found");
+    response.end();
+
+
+
+}
+
+
+const nonExistent = (request, response) => {
     let body = JSON.stringify({
         message: "Error Endpoint does not exist",
     });
 
-    response.writeHead(404, { 'Content-Type': 'application/json', 
-            'Content-Length': Buffer.byteLength(body,'utf8')
+    response.writeHead(404, {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body, 'utf8')
 
     });
-    response.write(body);    
+    response.write(body);
     response.end();
 }
 
