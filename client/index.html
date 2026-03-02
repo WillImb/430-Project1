@@ -4,106 +4,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="/style.css">
+    <title>Classic Literature API</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+
 
     <script>
 
 
-        const ResolveStatus = async (response, textField) => {
+        const ResolveStatus = async (method, response, textField) => {
             let status = response.status;
+            let responseObj;
 
-            let responseObj = await response.json();
+            textField.innerHTML = `Status: ${response.status}<br>Content-Length: ${response.headers.get('content-length')}`;
+
+
+            if (method != 'HEAD') {
+                responseObj = await response.json();
+
+            }
 
             switch (status) {
                 case 200:
-                    textField.innerHTML = JSON.stringify(responseObj);
+                    if (method != 'HEAD') {
+                        textField.innerHTML += `<br>Content: ${JSON.stringify(responseObj)}`
+                    }
                     break;
                 case 201:
+                    textField.innerHTML += `<br>Message: ${JSON.stringify(responseObj)}`
+
                     break;
                 case 204:
+                    textField.innerHTML += `<br>Message: ${JSON.stringify(responseObj)}`
+
                     break;
                 case 400:
-                    textField.innerHTML = JSON.stringify(responseObj);
-
+                    textField.innerHTML += `<br>Error: ${responseObj.error}`;
                     break;
-
                 case 404:
+                    textField.innerHTML += `<br>Error: ${(responseObj.error)}`;
                     break;
 
 
             }
         }
 
-        const AddBook = async () => {
 
-            /*
-            let response = await fetch(, {
-                method: 'POST',
+
+        //Get Requests
+        const GetAuthorBooks = async (form) => {
+
+            let method = document.querySelector("#author_method").value;
+            let authorText = document.querySelector("#specifiedAuthorText");
+
+            const author = form.querySelector("#authorName").value;
+
+            let params = new URLSearchParams();
+            params.append("author", author);
+
+            let response = await fetch(`/getBooksByAuthor?${params}`, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: 
+
             })
-                */
+
+            ResolveStatus(method, response, authorText);
+
+
         }
 
+        //Get a specific book by its title
         const GetSpecifiedBook = async (form) => {
+
+            let method = document.querySelector("#name_method").value;
 
             let bookText = document.querySelector("#specifiedBookText");
 
             const title = form.querySelector("#bookName").value;
 
             let params = new URLSearchParams();
-            params.append("title",title);
+            params.append("title", title);
 
             let response = await fetch(`/getBook?${params}`, {
-                method: 'GET',
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-            
+
             })
 
-            ResolveStatus(response,bookText);
+            ResolveStatus(method, response, bookText);
 
 
         }
 
         const GetAllBooks = async () => {
 
+            let method = document.querySelector("#getBooks_method").value;
             let bookText = document.querySelector("#books");
             let response = await fetch('/getAll', {
-                method: 'GET',
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                
+
             })
 
-            ResolveStatus(response, bookText);
+            ResolveStatus(method, response, bookText);
 
         }
         const GetTitles = async () => {
 
+            let method = document.querySelector("#getTitles_method").value;
             let titleText = document.querySelector("#titles");
             let response = await fetch('/getTitles', {
-                method: 'GET',
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
             })
 
-            ResolveStatus(response, titleText);
+            ResolveStatus(method, response, titleText);
+
+        }
+
+        //Post Requests
+        const AddNewBook = async (addBookForm) => {
+
+            let title = addBookForm.querySelector("#bookTitle").value;
+            let author = addBookForm.querySelector("#bookAuthor").value;
+
+            let data = JSON.stringify({ title, author });
+
+            let response = await fetch('/addBook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: data,
+            });
+            ResolveStatus('POST', response, document.querySelector("#addBookResponse"));
+
+        }
+
+        const AddReadStatus = async (readForm) => {
+
+            let title = readForm.querySelector("#addReadTitle").value;
+
+            let status = readForm.querySelector("#readStatus").value;
+
+            let data = JSON.stringify({ title, status });
+
+            let response = await fetch('/addRead', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: data,
+            });
+
+
+            ResolveStatus('POST', response, document.querySelector("#readBookResponse"));
 
         }
 
         const init = () => {
             const bookForm = document.querySelector("#bookForm");
+            const authorForm = document.querySelector("#authorForm");
+            const readForm = document.querySelector("#addReadForm");
+            const addBookForm = document.querySelector("#addBookForm");
+
             const booksButton = document.querySelector("#btn_Books");
             const titlesButton = document.querySelector("#btn_Titles");
 
@@ -114,14 +192,27 @@
                 return false;
             }
 
-            const Add = (e) => {
+            const GetAuthor = (e) => {
                 e.preventDefault();
-                AddBook();
+                GetAuthorBooks(authorForm);
                 return false;
             }
 
+            const AddBook = (e) => {
+                e.preventDefault();
+                AddNewBook(addBookForm);
+                return false;
+            }
+            const AddRead = (e) => {
+                e.preventDefault();
+                AddReadStatus(readForm);
+                return false;
+            }
 
             bookForm.addEventListener("submit", GetBook);
+            authorForm.addEventListener("submit", GetAuthor);
+            readForm.addEventListener("submit", AddRead);
+            addBookForm.addEventListener("submit", AddBook);
 
             booksButton.addEventListener("click", GetAllBooks);
             titlesButton.addEventListener("click", GetTitles);
@@ -141,34 +232,130 @@
 </head>
 
 <body>
-    Get Book by name
-    <form id="bookForm">
-        <input type="text" id="bookName">
-        <input type="submit" value="Submit">
-    </form>
-
-    <p id="specifiedBookText"></p>
-    
-    <br>Get books
-
-    <button id="btn_Books">/GetAllBooks</button>
-    <p id="books"></p>
-
-    GetBookTitles
-    <button id="btn_Titles">/GetAllTitles</button>
-    <p id="titles"></p>
 
 
 
-    get books by author
+    <nav class="navbar" style="background-color: rgba(129, 163, 138,0.5);">
+        <div class="navbar-item is-size-2">Classic Literature API </div>
+        <a class="navbar-item is-size-4 is-underlined" href="/">API</a>
+
+        <a class="navbar-item is-size-4 is-underlined" href="/docs">Documentation</a>
+    </nav>
+    <h2 class="is-size-2 has-text-weight-bold pt-6 ml-2">Get Requests</h2>
+    <br>
+    <section class="ml-5">
+        <h3 class="is-size-3">/getBook</h3>
+        <form id="bookForm">
+            <div class='column is-5'>
+                <div class="field">
+                    <div class="control">
+                        <input id="bookName" class="input" type="text" placeholder='Title'>
+                    </div>
+                </div>            
+
+            <select name="method" id="name_method" class="select">
+                <option value="GET">Get</option>
+                <option value="HEAD">Head</option>
+            </select>
+            <input type="submit" value="Submit" class="button">
+            </div>
+
+        </form>
+        <p id="specifiedBookText"></p>
+        <br>
+
+        <h3 class="is-size-3">/getAll</h3>
+        <div class='column is-5'>
+        <select name="method" id="getBooks_method" class="select">
+            <option value="GET">Get</option>
+            <option value="HEAD">Head</option>
+        </select>
+        <button id="btn_Books" class="button">/GetAllBooks</button>
+        </div>
+        <p id="books"></p>
+        <br>
+
+        <h3 class="is-size-3">/getTitles</h3>
+        <div class='column is-5'>
+        <select name="method" id="getTitles_method" class="select">
+            <option value="GET">Get</option>
+            <option value="HEAD">Head</option>
+        </select>
+        <button id="btn_Titles" class="button">/GetAllTitles</button>
+        </div>
+        <p id="titles"></p>
+
+        <br>
+
+        <h3 class="is-size-3">/getBooksByAuthor</h3>
+
+        <form id="authorForm">
+            <div class='column is-5'>
+                <div class="field">
+                    <div class="control">
+                        <input id="authorName" class="input" type="text" placeholder='Author'>
+                    </div>
+                </div>            
+            <select name="method" id="author_method" class="select">
+                <option value="GET">Get</option>
+                <option value="HEAD">Head</option>
+            </select>
+            <input type="submit" value="Submit" class="button">
+            </div>
+        </form>
+
+        <p id="specifiedAuthorText"></p>
+
+    </section>
 
 
-    <!--Post Requests-->
+    <!--Post Request-->
+    <h2 class="is-size-2 has-text-weight-bold pt-6 ml-2">Post Requests</h2>
+    <br>
+    <section class="ml-5">
+        <h3 class="is-size-3">/addBook</h3>
+        <form id="addBookForm">
+            <div class='column is-5'>
+                <div class="field">
+                    <div class="control">
+                        <input id="bookTitle" class="input" type="text" placeholder='Title'>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <input id="bookAuthor" class="input" type="text" placeholder='Author'>
+                    </div>
+                </div>
 
-    Add Book
+                <input type="submit" value="Submit" class="button">
+            </div>
+        </form>
 
-    Add read;
+        <p id="addBookResponse"></p>
+        <br>
 
+        <h3 class="is-size-3">/addRead</h3>
+        <form id="addReadForm">
+            <div class='column is-5'>
+                <div class="field">
+                    <div class="control">
+                        <input id="addReadTitle" class="input" type="text" placeholder='Title'>
+                    </div>
+                </div>
+
+                <select name="readStatus" id="readStatus" class="select">
+                    <option value="unread">Unread</option>
+                    <option value="read">Read</option>
+                    <option value="in progress">In Progress</option>
+                </select>
+                <input type="submit" value="Submit" class="button">
+            </div>
+        </form>
+
+        <p id="readBookResponse"></p>
+    </section>
+
+    <img src="/bookStack.png" style="position:absolute; top:50px; left:50%;">
 
 
 </body>

@@ -21,6 +21,9 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.0.2",
-    "globals": "^17.3.0"
+    "globals": "^17.4.0"
+  },
+  "dependencies": {
+    "bulma": "^1.0.4"
   }
 }

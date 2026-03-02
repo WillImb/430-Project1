@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+
+
+</head>
+
+<body>
+
+    <nav class="navbar" style="background-color: rgba(129, 163, 138,0.5);">
+        <div class="navbar-item is-size-2">Classic Literature API </div>
+        <a class="navbar-item is-size-4 is-underlined" href="/">API</a>
+
+        <a class="navbar-item is-size-4 is-underlined" href="/docs">Documentation</a>
+    </nav>
+
+    
+
+        <h2 class="is-size-2">Get Requests</h2>
+    <ul  class="is-size-3 p-4">
+            <h3 class="has-text-primary">/getBook</h3>
+            <details  class="is-size-4 has-text-light"><summary>Docs</summary>
+                <ul>
+                    <h4>Returns:</h4>
+                        <ul>A JSON Object containing data about the book | Format: <b>JSON Obj</b></ul>
+                    
+
+                    <h4>Parameters:</h4>
+                        <ul><b>Title</b> - The title of the book (required)</ul>
+
+                    <h4>Example</h4>
+                    <div>    
+                        <ul><b>Request:</b> /getBook?title=book+Title</ul>
+                        <ul><b>Response:</b> {{"author":"","country":"","language":"","link":"","pages":,"title":"bookTitle","year":,"genres":["",""]}}</ul>
+                    </div>
+                </ul>
+            </details>
+
+
+            <h3 class="has-text-primary">/getAll</h3>
+            <details class="is-size-4 has-text-light"><summary>Docs</summary>
+                  <ul >
+                    <h4>Returns:</h4>
+                        <ul>An Array of Book Objects | Format: <b>[JSON Objects]</b></ul>
+                    
+
+                    <h4>Parameters:</h4>
+                        <ul>No Parameters</ul>
+
+                    <h4>Example</h4>
+                    <div>    
+                        <ul><b>Request:</b> /getAll</ul>
+                        <ul><b>Response:</b> [{book1},{book2}, ...]</ul>
+                    </div>
+                </ul>
+            </details>
+
+
+            <h3 class="has-text-primary">/getTitles</h3>
+            <details class="is-size-4 has-text-light"><summary>Docs</summary>
+                  <ul >
+                    <h4>Returns:</h4>
+                        <ul>An Array of Titles | Format: <b>[String]</b></ul>
+                    
+
+                    <h4>Parameters:</h4>
+                        <ul>No Parameters</ul>
+
+                    <h4>Example</h4>
+                    <div>    
+                        <ul><b>Request:</b> /getTitles</ul>
+                        <ul><b>Response:</b> [title1, title2, ...]</ul>
+                    </div>
+                </ul>
+            </details>
+
+
+            <h3 class="has-text-primary">/getBooksByAuthor</h3>
+            <details class="is-size-4 has-text-light"><summary>Docs</summary>
+                  <ul >
+                    <h4>Returns:</h4>
+                        <ul>An Array of book objects by the inputed author | Format: <b>[JSON Objects]</b></ul>
+                    
+
+                    <h4>Parameters:</h4>
+                        <ul><b>author</b> - The Author's Name (required)</ul>
+                    <h4>Example</h4>
+                    <div>    
+                        <ul><b>Request:</b> /getBooksByAuthor?author=Author+Name</ul>
+                        <ul><b>Response:</b> [{book1},{book2}, ...]</ul>
+                    </div>
+                </ul>
+            </details>
+            </ul>
+
+
+        <h2  class="is-size-2">Post Requests</h2>
+
+
+           <ul   class="is-size-3 p-4"> <h3 class="has-text-primary">/addBook</h3>
+            <details class="is-size-4 has-text-light"><summary>Docs</summary>
+                  <ul>
+                    <h4>Returns:</h4>
+                        <ul>A Message stating if it was successfull or not</b></ul>
+                    
+
+                    <h4>Parameters:</h4>
+                        <ul><b>Title</b> - The Book's Title (required)</ul>
+                        <ul><b>Author</b> - The Author's Name (required)</ul>
+                    <h4>Example:</h4>
+                    <div>    
+                        <ul><b>Request:</b> /addBook</ul>
+                        <ul><b>Body:</b>{title="Title",author="Author"}</ul>
+                        <ul><b>Result</b>{message:"Book Added"}</ul>
+                        <br>
+                        <ul><b>Request:</b> /addBook</ul>
+                        <ul><b>Body:</b>{title="Title",author=""}</ul>
+                        <ul><b>Result</b>{error:"One or more parameters missing"}</ul>
+                    </div>
+                </ul>
+            </details>
+            
+
+            <h3 class="has-text-primary">/addRead</h3><details><summary class="is-size-4 has-text-light" >Docs</summary>
+                  <ul>
+                    <h4>Returns:</h4>
+                        <ul>A Message stating if the status was successfully updated</b></ul>                    
+
+                    <h4>Parameters:</h4>
+                        <ul><b>Title</b> - The Book's Title (required)</ul>
+                        <ul><b>Status</b> - The User's read status of the book (required)</ul>
+                    <h4>Example:</h4>
+                    <div>    
+                        <ul><b>Request:</b> /addRead</ul>
+                        <ul><b>Body:</b>{title="Title",status="read"}</ul>
+                        <ul><b>Result</b>{message:"Book Read Status Updated"}</ul>
+                        <br>
+                        <ul><b>Request:</b> /addBook</ul>
+                        <ul><b>Body:</b>{title="",status="unread"}</ul>
+                        <ul><b>Result</b>{error:"No Title Entered"}</ul>
+                    </div>
+                </ul>
+            </details>
+            </ul>
+
+
+</body>
+
+</html>

@@ -1,4 +1,6 @@
-body{
-    background-color: black;
-    color: white;
+
+p{
+   max-width: 50%; 
+   max-height: 20vh; 
+   overflow: auto;
 }
