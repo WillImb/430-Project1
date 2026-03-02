@@ -59,6 +59,7 @@ const GetBooksByAuthor = (request, response) => {
 
     let books = [];
 
+    //check if author exists or has any books in the array
     for (let i = 0; i < booksJson.length; i++) {
         if (booksJson[i].author == params.author) {
             books.push(booksJson[i]);

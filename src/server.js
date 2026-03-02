@@ -52,6 +52,7 @@ const onRequest = (request, response) => {
     const parsedUrl = new URL(request.url, `${protocol}://${request.headers.host}`);
 
 
+    //big switch that routes user requests
     switch (parsedUrl.pathname) {
         case '/':
             htmlHandler.getIndex(response);

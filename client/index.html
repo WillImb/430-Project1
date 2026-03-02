@@ -11,14 +11,14 @@
 
     <script>
 
-
+        //Runs actions based on the status code recieved
         const ResolveStatus = async (method, response, textField) => {
             let status = response.status;
             let responseObj;
 
             textField.innerHTML = `Status: ${response.status}<br>Content-Length: ${response.headers.get('content-length')}`;
 
-
+            //only returns header info if a head method
             if (method != 'HEAD') {
                 responseObj = await response.json();
 
@@ -59,9 +59,11 @@
 
             const author = form.querySelector("#authorName").value;
 
+            //creates queries
             let params = new URLSearchParams();
             params.append("author", author);
 
+            //fetch with querys
             let response = await fetch(`/getBooksByAuthor?${params}`, {
                 method: method,
                 headers: {
@@ -102,6 +104,7 @@
 
         }
 
+        //get all the book objects
         const GetAllBooks = async () => {
 
             let method = document.querySelector("#getBooks_method").value;
@@ -118,6 +121,7 @@
             ResolveStatus(method, response, bookText);
 
         }
+        //get all the titles
         const GetTitles = async () => {
 
             let method = document.querySelector("#getTitles_method").value;
@@ -154,6 +158,7 @@
 
         }
 
+        // update the reading status of a book
         const AddReadStatus = async (readForm) => {
 
             let title = readForm.querySelector("#addReadTitle").value;
@@ -176,6 +181,7 @@
 
         }
 
+        //initialize all the forms, buttons and methods
         const init = () => {
             const bookForm = document.querySelector("#bookForm");
             const authorForm = document.querySelector("#authorForm");
@@ -186,6 +192,7 @@
             const titlesButton = document.querySelector("#btn_Titles");
 
 
+            //methods foor forms
             const GetBook = (e) => {
                 e.preventDefault();
                 GetSpecifiedBook(bookForm);
@@ -209,6 +216,7 @@
                 return false;
             }
 
+            //hook up buttons
             bookForm.addEventListener("submit", GetBook);
             authorForm.addEventListener("submit", GetAuthor);
             readForm.addEventListener("submit", AddRead);
@@ -234,7 +242,7 @@
 <body>
 
 
-
+    <!--Bulma navbar-->
     <nav class="navbar" style="background-color: rgba(129, 163, 138,0.5);">
         <div class="navbar-item is-size-2">Classic Literature API </div>
         <a class="navbar-item is-size-4 is-underlined" href="/">API</a>
@@ -355,6 +363,7 @@
         <p id="readBookResponse"></p>
     </section>
 
+    <!--Our book image-->
     <img src="/bookStack.png" style="position:absolute; top:50px; left:50%;">
 
 
